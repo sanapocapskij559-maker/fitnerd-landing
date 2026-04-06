@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fitnerd — Landing v2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1113;
+      --bg-2: #11191c;
+      --bg-3: #0e1518;
+      --text: #f3f7f7;
+      --muted: #b6c3c7;
+      --muted-2: #aab7bc;
+      --teal: #5eead4;
+      --teal-soft: rgba(94, 234, 212, 0.14);
+      --purple: #c084fc;
+      --indigo: #7c8cff;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 24px 60px rgba(0,0,0,0.35);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --container: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(94,234,212,0.05), transparent 28%),
+        radial-gradient(circle at 70% 30%, rgba(192,132,252,0.10), transparent 24%),
+        linear-gradient(to bottom, rgba(255,255,255,0.02), transparent 25%),
+        linear-gradient(to right, rgba(192,132,252,0.20) 1.5px, transparent 1.5px),
+        linear-gradient(to bottom, rgba(192,132,252,0.20) 1.5px, transparent 1.5px),
+        linear-gradient(45deg, rgba(168,85,247,0.18) 0%, rgba(192,132,252,0.12) 20%, rgba(124,140,255,0.08) 42%, rgba(94,234,212,0.05) 68%, rgba(11,17,19,0) 100%),
+        var(--bg);
+      background-size: auto, auto, auto, 128px 128px, 128px 128px, auto, auto;
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      border-radius: 50%;
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      width: 420px; height: 420px; left: -90px; top: -50px;
+      background: rgba(94,234,212,0.10);
+    }
+    body::after {
+      width: 360px; height: 360px; right: -80px; top: 18%;
+      background: rgba(192,132,252,0.10);
+    }
+
+    .page { position: relative; z-index: 1; }
+    .container {
+      width: min(calc(100% - 40px), var(--container));
+      margin: 0 auto;
+    }
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(11,17,19,0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: rgba(255,255,255,0.92);
+    }
+    .brand-badge {
+      width: 32px; height: 32px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(94,234,212,0.15);
+      border: 1px solid rgba(94,234,212,0.25);
+      color: #8ef3e3;
+      font-size: 14px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border-radius: 16px;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+      font: 500 16px/1.2 Inter, sans-serif;
+      transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease;
+    }
+    .btn:hover { transform: translateY(-1px); opacity: .96; }
+    .btn-primary {
+      background: var(--teal);
+      color: #081113;
+      box-shadow: 0 12px 30px rgba(94,234,212,0.18);
+    }
+
+    .section { padding: 72px 0; }
+    .hero {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      align-items: center;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.76);
+      font-size: 12px;
+      letter-spacing: .01em;
+      width: fit-content;
+    }
+    .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--teal); }
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      letter-spacing: -0.03em;
+    }
+    h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.03; }
+    h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
+    h3 { font-size: 22px; line-height: 1.15; }
+    p { margin: 0; }
+    .hero-copy p {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 19px);
+      line-height: 1.6;
+      max-width: 620px;
+    }
+    .hero-actions {
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .microcopy {
+      color: var(--muted-2);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 560px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background:
+        linear-gradient(to right, rgba(11,17,19,0.95), rgba(11,17,19,0.55) 48%, rgba(11,17,19,0.18) 100%),
+        url('https://images.unsplash.com/photo-1518310952931-b1de897abd40?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat,
+        #121b1e;
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(192,132,252,0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(192,132,252,0.14) 1px, transparent 1px);
+      background-size: 96px 96px;
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    .hero-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11,17,19,0.82), rgba(11,17,19,0) 45%);
+      pointer-events: none;
+    }
+    .visual-stack {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 28px;
+      display: grid;
+      gap: 16px;
+      z-index: 2;
+    }
+    .glass-card {
+      background: rgba(14,21,24,0.86);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 18px;
+    }
+    .eyebrow {
+      font-size: 12px;
+      line-height: 1.2;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #9aaab0;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .metric {
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .metric span { display: block; }
+    .metric .label { color: var(--muted-2); font-size: 12px; }
+    .metric .value { margin-top: 6px; font-size: 14px; font-weight: 500; }
+    .plan-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .plan-chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(94,234,212,0.12);
+      color: #8ef3e3;
+      border: 1px solid rgba(94,234,212,0.14);
+      white-space: nowrap;
+    }
+    .plan-list { display: grid; gap: 10px; margin-top: 14px; }
+    .plan-item {
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      padding: 12px 14px;
+      font-size: 14px;
+    }
+
+    .cards-grid,
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 20px;
+    }
+    .feature-card,
+    .step-card,
+    .faq-item,
+    .form-shell {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+    }
+    .feature-card,
+    .step-card { padding: 24px; }
+    .feature-icon {
+      width: 44px; height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: var(--teal-soft);
+      border: 1px solid rgba(94,234,212,0.20);
+      color: #8ef3e3;
+      font-size: 18px;
+    }
+    .feature-card p,
+    .step-card p,
+    .faq-copy p,
+    .waitlist-copy p,
+    .faq-item p {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .section-label {
+      color: var(--teal);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .section-intro { max-width: 720px; margin-bottom: 32px; }
+
+    .step-no {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .faq-item { padding: 18px 20px; }
+    .faq-item + .faq-item { margin-top: 14px; }
+    .faq-item summary {
+      cursor: pointer;
+      list-style: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item .plus {
+      flex: 0 0 auto;
+      width: 26px; height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      color: #8ef3e3;
+      background: rgba(94,234,212,0.10);
+      border: 1px solid rgba(94,234,212,0.16);
+    }
+
+    .waitlist-shell {
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(to bottom right, #11191c, #0e1417);
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+    .waitlist-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 32px;
+      align-items: center;
+    }
+    .form-shell {
+      background: #0b1113;
+      padding: 20px;
+    }
+    .field { margin-bottom: 14px; }
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted-2);
+      font-size: 14px;
+    }
+    .field input {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 14px;
+      outline: none;
+    }
+    .choices { display: grid; gap: 10px; }
+    .choice {
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      padding: 12px 14px;
+      color: rgba(255,255,255,0.90);
+      font-size: 14px;
+    }
+    .footer-note {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted-2);
+    }
+    .tally-wrap { min-height: 480px; }
+    .tally-wrap iframe {
+      width: 100%;
+      min-height: 520px;
+      border: 0;
+      border-radius: 20px;
+      background: #fff;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .faq-grid,
+      .waitlist-grid {
+        grid-template-columns: 1fr;
+      }
+      .cards-grid,
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-visual { min-height: 500px; }
+      .visual-stack { left: 18px; right: 18px; bottom: 18px; }
+    }
+
+    @media (max-width: 640px) {
+      .container { width: min(calc(100% - 24px), var(--container)); }
+      .section { padding: 56px 0; }
+      .header-inner { padding: 12px 0; }
+      .hero { min-height: auto; }
+      .hero-grid { gap: 28px; }
+      .hero-copy p { font-size: 16px; }
+      .hero-actions { align-items: stretch; }
+      .hero-actions .btn { width: 100%; }
+      .hero-visual { min-height: 420px; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .waitlist-shell { padding: 18px; }
+      .form-shell { padding: 16px; }
+      .tally-wrap iframe { min-height: 560px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand"><span class="brand-badge">✦</span>Fitnerd</div>
+        <a class="btn btn-primary" href="#waitlist">Get early access</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="section hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <div class="pill"><span class="dot"></span>Invite-only AI trainer</div>
+            <h1 style="margin-top:18px;">Fitness without pressure.</h1>
+            <p>A calmer AI trainer for introverts. Fitnerd builds workouts around your mood, energy, and real-life rhythm.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#waitlist">Join the waitlist →</a>
+              <span class="microcopy">No pressure. Just first access.</span>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="visual-stack">
+              <div class="glass-card">
+                <div class="eyebrow">Today</div>
+                <h3 style="margin-top:10px;">A plan that fits how you feel.</h3>
+                <div class="metric-grid">
+                  <div class="metric"><span class="label">Mood</span><span class="value">Focused</span></div>
+                  <div class="metric"><span class="label">Energy</span><span class="value">Light</span></div>
+                  <div class="metric"><span class="label">Recovery</span><span class="value">Good</span></div>
+                </div>
+              </div>
+
+              <div class="glass-card">
+                <div class="plan-head">
+                  <div>
+                    <div style="font-size:14px;color:var(--muted-2)">Suggested session</div>
+                    <div style="margin-top:6px;font-weight:600;font-size:20px;font-family:'Space Grotesk',Inter,sans-serif">Gentle home strength flow</div>
+                  </div>
+                  <div class="plan-chip">28 min</div>
+                </div>
+                <div class="plan-list">
+                  <div class="plan-item">Mobility warm-up</div>
+                  <div class="plan-item">Low-pressure strength circuit</div>
+                  <div class="plan-item">Breathing cool-down</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container cards-grid">
+          <article class="feature-card">
+            <div class="feature-icon">◌</div>
+            <h3 style="margin-top:18px;">Adapts to your day</h3>
+            <p>Mood, energy, and biometric signals help shape a plan that feels realistic today.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">◒</div>
+            <h3 style="margin-top:18px;">Made for introverts</h3>
+            <p>A quieter, lower-pressure fitness experience without the usual performance vibe.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">↗</div>
+            <h3 style="margin-top:18px;">Built for consistency</h3>
+            <p>Smarter planning reduces friction, so it feels easier to keep going.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-intro">
+            <div class="section-label">How it works</div>
+            <h2>Clear enough to trust. Simple enough to use.</h2>
+          </div>
+          <div class="steps-grid">
+            <article class="step-card">
+              <div class="step-no">01</div>
+              <h3>Check in</h3>
+              <p>Fitnerd reads your mood, energy, and daily state before suggesting what makes sense.</p>
+            </article>
+            <article class="step-card">
+              <div class="step-no">02</div>
+              <h3>Get a plan</h3>
+              <p>The AI turns that input into a workout plan that matches your real condition.</p>
+            </article>
+            <article class="step-card">
+              <div class="step-no">03</div>
+              <h3>Stay steady</h3>
+              <p>Less pressure, less overthinking, and a routine that feels easier to return to.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container faq-grid">
+          <div class="faq-copy">
+            <div class="pill" style="margin-bottom:16px;"><span style="color:#8ef3e3;">✦</span>FAQ instead of fake proof</div>
+            <h2>A few things people will want to know.</h2>
+            <p>Early-stage products build trust through clarity. Keep this part short, calm, and direct.</p>
+          </div>
+          <div>
+            <details class="faq-item" open>
+              <summary>How is this different from a regular fitness app?<span class="plus">+</span></summary>
+              <p>Fitnerd adapts to your mood, energy, and biometric input instead of serving one fixed plan.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Why is it built for introverts?<span class="plus">+</span></summary>
+              <p>Because not everyone wants fitness to feel loud, social, or intense all the time.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Why join the waitlist now?<span class="plus">+</span></summary>
+              <p>Fitnerd is invite-only, so early users get first access when invites open.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="waitlist">
+        <div class="container waitlist-shell">
+          <div class="waitlist-grid">
+            <div class="waitlist-copy">
+              <div class="pill"><span style="color:#8ef3e3;">✦</span>Invite-only access</div>
+              <h2 style="margin-top:16px;">Get early access to Fitnerd.</h2>
+              <p style="margin-top:14px;">Add your email and secure your spot before public launch.</p>
+            </div>
+
+            <div class="form-shell" id="form-area">
+              <div class="field">
+                <label>Name</label>
+                <input type="text" placeholder="Alex" />
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <input type="email" placeholder="you@example.com" />
+              </div>
+              <div class="field">
+                <label>What sounds most useful?</label>
+                <div class="choices">
+                  <div class="choice">Personalized plan</div>
+                  <div class="choice">Less pressure</div>
+                  <div class="choice">Better consistency</div>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="width:100%;margin-top:4px;">Get early access →</button>
+              <div class="footer-note">No pressure. Just first access.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const TALLY_FORM_URL = "";
+    if (TALLY_FORM_URL) {
+      const target = document.getElementById('form-area');
+      target.innerHTML = `
+        <div class="tally-wrap">
+          <iframe src="${TALLY_FORM_URL}?transparentBackground=1" title="Tally form"></iframe>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
